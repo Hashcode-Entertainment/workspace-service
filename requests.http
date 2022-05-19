@@ -1,0 +1,21 @@
+### Create a new workspace (admin)
+POST {{host}}/workspaces
+Accept: application/json
+Content-Type: application/json
+
+{
+  "owner": "pawelkielb-admin",
+  "staticFiles": {
+    "task.yaml": "{ ... }"
+  }
+}
+
+### Create a new worksapce (user)
+POST {{host}}/workspaces
+Accept: application/json
+Content-Type: application/json
+
+{
+  "owner": "pawelkielb-user",
+  "template": "sdjafjlx138"
+}
