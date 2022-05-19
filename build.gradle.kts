@@ -27,11 +27,14 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    
+
     runtimeOnly("org.postgresql:postgresql")
+
+    implementation("org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r")
+    implementation("org.eclipse.jgit:org.eclipse.jgit.http.server:6.1.0.202203080745-r")
 }
 
 tasks.test {
