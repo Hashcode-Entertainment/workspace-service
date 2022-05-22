@@ -5,8 +5,11 @@ Content-Type: application/json
 
 {
   "owner": "pawelkielb-admin",
-  "staticFiles": {
-    "task.yaml": "{ ... }"
+  "hooks": {
+    "onUpdate": {
+      "file": "task.yaml",
+      "url": "http://localhost:8080/hooks/onUpdate"
+    }
   }
 }
 
@@ -17,5 +20,25 @@ Content-Type: application/json
 
 {
   "owner": "pawelkielb-user",
-  "template": "sdjafjlx138"
+  "template": "sdjafjlx138",
+  "readOnlyFiles": [
+    "README.md",
+    "src/file.txt"
+  ]
 }
+
+### Add files
+POST {{host}}/workspaces/sdjafjlx138/files
+Accept: application/json
+Content-Type: application/json
+
+[
+  {
+    "path": "src/file1.txt",
+    "content": "Zadanie 1"
+  },
+  {
+    "name": "task.yaml",
+    "content": "{ ... }"
+  }
+]
