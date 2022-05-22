@@ -1,9 +1,8 @@
 package com.workspaceservice.controller;
 
 import com.workspaceservice.dao.Workspace;
-import com.workspaceservice.dto.AdminRequestDTO;
-import com.workspaceservice.dto.JsonRequestDTO;
-import com.workspaceservice.dto.UserRequestDTO;
+import com.workspaceservice.dto.CreateWorkspaceRequestDTO;
+import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
@@ -44,23 +43,16 @@ public class WorkspaceController {
     // http://localhost:8080/workspace
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace createAdminRepo(@RequestBody AdminRequestDTO adminRequestDTO){
-        return gitService.createAdminRepo(adminRequestDTO);
+    public Workspace createAdminWorkspace(@RequestBody CreateWorkspaceRequestDTO createWorkspaceRequestDTO){
+        return gitService.createAdminWorkspace(createWorkspaceRequestDTO);
     }
 
     //Todo
     // http://localhost:8080/workspace
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace createUserRepo(@RequestBody UserRequestDTO userRequestDTO){
-        return gitService.createUserRepo(userRequestDTO);
-    }
-
-    // http://localhost:8080/workspace
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Workspace addFile(@RequestBody JsonRequestDTO jsonRequestDTO){
-        return gitService.addFile(jsonRequestDTO);
+    public Workspace addFile(@RequestBody AddFilesRequestDTO addFilesRequestDTO){
+        return gitService.addFileToWorkspace(addFilesRequestDTO);
     }
 
     // DELETE Methods

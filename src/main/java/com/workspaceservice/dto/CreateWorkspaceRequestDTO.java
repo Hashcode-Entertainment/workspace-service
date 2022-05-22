@@ -1,5 +1,5 @@
 package com.workspaceservice.dto;
 
-public class AdminRequestDTO {
+public class CreateWorkspaceRequestDTO {
     //TODO
 }
