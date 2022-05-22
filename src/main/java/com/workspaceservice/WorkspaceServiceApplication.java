@@ -2,6 +2,8 @@ package com.workspaceservice;
 
 import org.eclipse.jgit.http.server.GitServlet;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -12,7 +14,15 @@ import java.io.IOException;
 
 
 @SpringBootApplication
-public class WorkspaceServiceApplication {
+public class WorkspaceServiceApplication implements CommandLineRunner {
+    @Autowired
+    private Data data;
+
+    @Override
+    public void run(String... args) throws Exception {
+        //data.deleteRep();
+        data.populate();
+    }
 
     @Bean
     public ServletRegistrationBean<GitServlet> git() throws IOException {
