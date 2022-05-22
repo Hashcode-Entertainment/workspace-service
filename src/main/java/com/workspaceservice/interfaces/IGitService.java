@@ -5,6 +5,6 @@ import com.workspaceservice.dto.CreateWorkspaceRequestDTO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 
 public interface IGitService {
-    Workspace createAdminWorkspace(CreateWorkspaceRequestDTO adminRequestDTO);
-    Workspace addFileToWorkspace(AddFilesRequestDTO jsonRequestDTO);
+    Workspace createWorkspace(CreateWorkspaceRequestDTO adminRequestDTO);
+    Workspace addFileToWorkspace(String template, AddFilesRequestDTO jsonRequestDTO);
 }

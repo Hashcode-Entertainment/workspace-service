@@ -38,21 +38,19 @@ public class WorkspaceController {
         return workspaceRepository.findById(id);
     }
 
-    //Todo
     // POST Methods
     // http://localhost:8080/workspace
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace createAdminWorkspace(@RequestBody CreateWorkspaceRequestDTO createWorkspaceRequestDTO){
-        return gitService.createAdminWorkspace(createWorkspaceRequestDTO);
+    public Workspace createWorkspace(@RequestBody CreateWorkspaceRequestDTO createWorkspaceRequestDTO){
+        return gitService.createWorkspace(createWorkspaceRequestDTO);
     }
 
-    //Todo
-    // http://localhost:8080/workspace
-    @PostMapping()
+    // http://localhost:8080/workspace/user
+    @PostMapping("/{template}/files")
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace addFile(@RequestBody AddFilesRequestDTO addFilesRequestDTO){
-        return gitService.addFileToWorkspace(addFilesRequestDTO);
+    public Workspace addFile(@PathVariable String template, @RequestBody AddFilesRequestDTO addFilesRequestDTO){
+        return gitService.addFileToWorkspace(template, addFilesRequestDTO);
     }
 
     // DELETE Methods

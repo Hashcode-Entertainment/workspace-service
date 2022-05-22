@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 public class GitService implements IGitService {
     //TODO
     @Override
-    public Workspace createAdminWorkspace(CreateWorkspaceRequestDTO adminRequestDTO) {
+    public Workspace createWorkspace(CreateWorkspaceRequestDTO adminRequestDTO) {
         return null;
     }
 
     //TODO
     @Override
-    public Workspace addFileToWorkspace(AddFilesRequestDTO jsonRequestDTO) {
+    public Workspace addFileToWorkspace(String template, AddFilesRequestDTO jsonRequestDTO) {
         return null;
     }
 
