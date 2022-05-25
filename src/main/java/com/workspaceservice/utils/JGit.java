@@ -14,8 +14,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public abstract class JGit {
-    public static void createRepo(String name, Path path) throws IOException {
-        try (var repo = new FileRepository(path.toFile())) {
+    public static void createRepo(String name, Path parentDirectory) throws IOException {
+        var repoPath = parentDirectory.resolve(name);
+        try (var repo = new FileRepository(repoPath.toFile())) {
             boolean bare = true;
             repo.create(bare);
         }
