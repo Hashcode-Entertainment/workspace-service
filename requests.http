@@ -38,7 +38,7 @@ Content-Type: application/json
     "content": "Zadanie 1"
   },
   {
-    "name": "task.yaml",
+    "path": "task.yaml",
     "content": "{ ... }"
   }
 ]
