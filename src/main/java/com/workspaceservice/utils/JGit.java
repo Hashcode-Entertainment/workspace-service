@@ -21,8 +21,8 @@ public abstract class JGit {
         }
     }
 
-    public static void deleteRepo(Path path) throws IOException {
-        Files.delete(path);
+    public static void deleteRepo(Path path) {
+        FilesKt.deleteRecursively(path.toFile());
     }
 
     public static void commitFiles(
