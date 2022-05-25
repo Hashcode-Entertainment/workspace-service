@@ -35,6 +35,8 @@ dependencies {
 
     implementation("org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r")
     implementation("org.eclipse.jgit:org.eclipse.jgit.http.server:6.1.0.202203080745-r")
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
 }
 
 tasks.test {
