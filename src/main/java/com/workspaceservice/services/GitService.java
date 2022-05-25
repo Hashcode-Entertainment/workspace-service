@@ -1,7 +1,7 @@
 package com.workspaceservice.services;
 
 import com.workspaceservice.dao.Workspace;
-import com.workspaceservice.dto.CreateWorkspaceRequestDTO;
+import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.interfaces.IGitService;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class GitService implements IGitService {
     //TODO
     @Override
-    public Workspace createWorkspace(CreateWorkspaceRequestDTO adminRequestDTO) {
+    public Workspace createWorkspace(WorkspaceDTO workspaceDTO) {
         return null;
     }
 

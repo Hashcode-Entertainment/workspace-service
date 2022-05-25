@@ -1,7 +1,7 @@
 package com.workspaceservice.controller;
 
 import com.workspaceservice.dao.Workspace;
-import com.workspaceservice.dto.CreateWorkspaceRequestDTO;
+import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
@@ -42,8 +42,8 @@ public class WorkspaceController {
     // http://localhost:8080/workspace
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace createWorkspace(@RequestBody CreateWorkspaceRequestDTO createWorkspaceRequestDTO){
-        return gitService.createWorkspace(createWorkspaceRequestDTO);
+    public Workspace createWorkspace(@RequestBody WorkspaceDTO workspaceDTO){
+        return workspaceService.createWorkspace(workspaceDTO);
     }
 
     // http://localhost:8080/workspace/user
