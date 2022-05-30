@@ -20,26 +20,26 @@ public class WorkspaceServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //data.deleteRep();
-        data.populate();
+//        data.populate();
+//        data.deleteRep();
     }
 
-    @Bean
-    public ServletRegistrationBean<GitServlet> git() throws IOException {
-        var localPath = new File("repos", "repo1.git");
-        localPath.deleteOnExit();
-        var repository = FileRepositoryBuilder.create(localPath);
-        repository.create(true);
-        var gitServlet = new GitServlet();
-        gitServlet.setRepositoryResolver((req, name) -> {
-            repository.incrementOpen();
-            return repository;
-        });
-
-        System.out.println("Repository name: " + repository.getDirectory().getAbsolutePath());
-
-        return new ServletRegistrationBean<>(gitServlet, "/git/*");
-    }
+//    @Bean
+//    public ServletRegistrationBean<GitServlet> git() throws IOException {
+//        var localPath = new File("repos", "repo1.git");
+//        localPath.deleteOnExit();
+//        var repository = FileRepositoryBuilder.create(localPath);
+//        repository.create(true);
+//        var gitServlet = new GitServlet();
+//        gitServlet.setRepositoryResolver((req, name) -> {
+//            repository.incrementOpen();
+//            return repository;
+//        });
+//
+//        System.out.println("Repository name: " + repository.getDirectory().getAbsolutePath());
+//
+//        return new ServletRegistrationBean<>(gitServlet, "/git/*");
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(WorkspaceServiceApplication.class, args);
