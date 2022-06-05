@@ -9,9 +9,8 @@ import java.net.URL;
 import java.nio.file.Path;
 
 public abstract class JGit {
-    public static void createRepo(String name, Path parentDirectory) throws IOException {
-        var repoPath = parentDirectory.resolve(name);
-        try (var repo = new FileRepository(repoPath.toFile())) {
+    public static void createRepo(Path path) throws IOException {
+        try (var repo = new FileRepository(path.toFile())) {
             boolean bare = true;
             repo.create(bare);
         }
@@ -27,5 +26,9 @@ public abstract class JGit {
         } catch (MalformedURLException e) {
             throw new AssertionError(e);
         }
+    }
+
+    public static String resolveBranchRef(String branch) {
+        return "refs/heads/" + branch;
     }
 }

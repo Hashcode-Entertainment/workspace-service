@@ -17,7 +17,7 @@ public class GitServer {
 
     public URL createRepo(String id) throws FileSystemException {
         try {
-            JGit.createRepo(id, rootPath);
+            JGit.createRepo(resolveRepoPath(id));
         } catch (IOException e) {
             throw new FileSystemException(e);
         }

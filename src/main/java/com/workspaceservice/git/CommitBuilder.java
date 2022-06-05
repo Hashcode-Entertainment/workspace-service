@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Instant;
 
+import static com.workspaceservice.git.JGit.resolveBranchRef;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
 
@@ -60,6 +61,8 @@ public class CommitBuilder {
             commitInternal(message, branch, authorName, authorEmail);
         } catch (IOException e) {
             throw new FileSystemException(e);
+        } finally {
+            repo.close();
         }
     }
 
@@ -69,12 +72,8 @@ public class CommitBuilder {
         if (committed) {
             throw new IllegalStateException("Already committed");
         }
-        committed = true;
 
-        var branchRef = repo.findRef(branch);
-        if (branchRef == null) {
-            throw new IllegalArgumentException("Branch not found");
-        }
+        var branchRefName = resolveBranchRef(branch);
 
         ObjectId commitId;
         try (var inserter = repo.getObjectDatabase().newInserter()) {
@@ -86,16 +85,22 @@ public class CommitBuilder {
             var author = new PersonIdent(authorName, authorEmail);
             commitBuilder.setAuthor(author);
             commitBuilder.setCommitter(author);
-            commitBuilder.setParentId(branchRef.getObjectId());
+
+            var branchRef = repo.exactRef(branchRefName);
+            if (branchRef != null) {
+                commitBuilder.setParentId(branchRef.getObjectId());
+            }
 
             commitId = inserter.insert(commitBuilder);
         }
 
-        var updateRequest = repo.updateRef(branchRef.getName());
+        var updateRequest = repo.updateRef(branchRefName);
         updateRequest.setNewObjectId(commitId);
         var result = updateRequest.update();
-        if (result != RefUpdate.Result.FAST_FORWARD) {
+        if (result != RefUpdate.Result.FAST_FORWARD && result != RefUpdate.Result.NEW) {
             throw new IllegalStateException("Failed to update branch, result: " + result);
         }
+
+        committed = true;
     }
 }
