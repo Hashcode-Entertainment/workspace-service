@@ -7,14 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Workspace {
+public class WorkspaceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +27,7 @@ public class Workspace {
 
     private String template;
 
-    public Workspace(User owner, String template) {
+    public WorkspaceEntity(User owner, String template) {
         this.owner = owner;
         this.template = template;
     }

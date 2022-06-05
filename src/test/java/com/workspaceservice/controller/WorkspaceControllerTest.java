@@ -1,18 +1,15 @@
 package com.workspaceservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.workspaceservice.dao.Workspace;
+import com.workspaceservice.dao.WorkspaceEntity;
 import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import com.workspaceservice.user.User;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -40,14 +37,14 @@ class WorkspaceControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    Workspace workspace1;
-    Workspace workspace2;
+    WorkspaceEntity workspace1;
+    WorkspaceEntity workspace2;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        workspace1 = new Workspace(new User("user1"), "cljdbd");
-        workspace2 = new Workspace(new User("user2"), "aVsdva");
+        workspace1 = new WorkspaceEntity(new User("user1"), "cljdbd");
+        workspace2 = new WorkspaceEntity(new User("user2"), "aVsdva");
         workspaceRepository.saveAll(List.of(workspace1, workspace2));
     }
 
