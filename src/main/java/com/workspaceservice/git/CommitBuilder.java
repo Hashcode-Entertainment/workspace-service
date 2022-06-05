@@ -2,24 +2,16 @@ package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
 import org.eclipse.jgit.dircache.DirCache;
-import org.eclipse.jgit.dircache.DirCacheEntry;
-import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.Repository;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.time.Instant;
 
-import static com.workspaceservice.git.JGit.resolveBranchRef;
-import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
-import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static com.workspaceservice.git.JGit.addFileToDirCache;
+import static com.workspaceservice.git.JGit.loadRepo;
 
 public class CommitBuilder {
     private final Path repoPath;
-    private Repository repo;
+    private Repository repo = null;
     private final DirCache dirCache = DirCache.newInCore();
     private boolean committed = false;
 
@@ -28,79 +20,33 @@ public class CommitBuilder {
     }
 
     private void openRepo() throws FileSystemException {
-        try {
-            repo = new FileRepository(repoPath.toFile());
-        } catch (IOException e) {
-            throw new FileSystemException(e);
+        if (repo != null) {
+            return;
         }
+
+        repo = loadRepo(repoPath);
     }
 
     public void addFile(Path path, byte[] bytes) throws FileSystemException {
         openRepo();
-        var entry = new DirCacheEntry(path.toString());
-        entry.setLength(bytes.length);
-        entry.setLastModified(Instant.now());
-        entry.setFileMode(REGULAR_FILE);
+        addFileToDirCache(dirCache, path, bytes, repo);
+    }
 
-        try (var inserter = repo.getObjectDatabase().newInserter()) {
-            var blobId = inserter.insert(OBJ_BLOB, bytes);
-            entry.setObjectId(blobId);
-        } catch (IOException e) {
-            throw new FileSystemException(e);
-        }
-
-        var dirCacheBuilder = dirCache.builder();
-        dirCacheBuilder.add(entry);
-        dirCacheBuilder.finish();
+    public void addFile(Path path, String content) throws FileSystemException {
+        addFile(path, content.getBytes());
     }
 
     public void commit(String message, String branch, String authorName, String authorEmail)
             throws FileSystemException {
 
-        try {
-            commitInternal(message, branch, authorName, authorEmail);
-        } catch (IOException e) {
-            throw new FileSystemException(e);
-        } finally {
-            repo.close();
-        }
-    }
-
-    private void commitInternal(String message, String branch, String authorName, String authorEmail)
-            throws IOException {
+        openRepo();
 
         if (committed) {
             throw new IllegalStateException("Already committed");
         }
 
-        var branchRefName = resolveBranchRef(branch);
-
-        ObjectId commitId;
-        try (var inserter = repo.getObjectDatabase().newInserter()) {
-            var treeId = dirCache.writeTree(inserter);
-            var commitBuilder = new org.eclipse.jgit.lib.CommitBuilder();
-            commitBuilder.setTreeId(treeId);
-            commitBuilder.setMessage(message);
-
-            var author = new PersonIdent(authorName, authorEmail);
-            commitBuilder.setAuthor(author);
-            commitBuilder.setCommitter(author);
-
-            var branchRef = repo.exactRef(branchRefName);
-            if (branchRef != null) {
-                commitBuilder.setParentId(branchRef.getObjectId());
-            }
-
-            commitId = inserter.insert(commitBuilder);
-        }
-
-        var updateRequest = repo.updateRef(branchRefName);
-        updateRequest.setNewObjectId(commitId);
-        var result = updateRequest.update();
-        if (result != RefUpdate.Result.FAST_FORWARD && result != RefUpdate.Result.NEW) {
-            throw new IllegalStateException("Failed to update branch, result: " + result);
-        }
-
+        JGit.commit(repo, dirCache, message, branch, authorName, authorEmail);
+        repo.close();
         committed = true;
     }
 }

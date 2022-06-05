@@ -2,9 +2,11 @@ package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+
+import static com.workspaceservice.git.GitUtils.generateRepoUrl;
+
 
 public class GitServer {
     private final Path rootPath;
@@ -16,13 +18,9 @@ public class GitServer {
     }
 
     public URL createRepo(String id) throws FileSystemException {
-        try {
-            JGit.createRepo(resolveRepoPath(id));
-        } catch (IOException e) {
-            throw new FileSystemException(e);
-        }
+        JGit.createRepo(resolveRepoPath(id));
 
-        return JGit.generateRepoUrl(baseUrl, id);
+        return generateRepoUrl(baseUrl, id);
     }
 
     @SuppressWarnings("RedundantThrows")
