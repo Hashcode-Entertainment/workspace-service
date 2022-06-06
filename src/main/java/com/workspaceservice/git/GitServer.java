@@ -1,16 +1,23 @@
 package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 
 import static com.workspaceservice.git.GitUtils.generateRepoPath;
 
-@RequiredArgsConstructor
+@Component
 public class GitServer {
     private final Path rootPath;
+
+    @Autowired
+    public GitServer(@Qualifier("gitServerRoot") Path rootPath) {
+        this.rootPath = rootPath;
+    }
 
     public String createRepo(@NotNull String id) throws FileSystemException {
         JGit.createRepo(resolveRepoPath(id));

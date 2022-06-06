@@ -1,14 +1,14 @@
 package com.workspaceservice.controller;
 
 import com.workspaceservice.dao.WorkspaceEntity;
-import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
-import com.workspaceservice.interfaces.IGitService;
+import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +40,12 @@ public class WorkspaceController {
     // POST Methods
     // http://localhost:8080/workspace
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public WorkspaceDTO createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
-        return workspaceService.createWorkspace(newWorkspaceDTO);
+    public ResponseEntity<WorkspaceDTO> createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
+        try {
+            return new ResponseEntity<>(workspaceService.createWorkspace(newWorkspaceDTO), HttpStatus.CREATED);
+        } catch (FileSystemException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // http://localhost:8080/workspace/user

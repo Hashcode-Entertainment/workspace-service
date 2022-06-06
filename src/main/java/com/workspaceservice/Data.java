@@ -14,10 +14,10 @@ public class Data {
     private WorkspaceRepository workspaceRepository;
 
     public void populate() {
-        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user1"), "cljdbd"));
-        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user2"), "aVsdva"));
-        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user3"), "sadvaf"));
-        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user4"), "mghmfg"));
-        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user5"), "sbhsbd"));
+        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user1"), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj"));
+        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user2"), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj"));
+        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user3"), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj"));
+        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user4"), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj"));
+        workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), new User("user5"), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj"));
     }
 }

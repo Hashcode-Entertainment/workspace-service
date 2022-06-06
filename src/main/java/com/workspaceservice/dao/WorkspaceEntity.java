@@ -8,8 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.UUID;
 
@@ -26,11 +24,7 @@ public class WorkspaceEntity {
     @Type(type = "com.workspaceservice.user.UserHibernateType")
     private User owner;
 
-    private String template;
+    private UUID template;
 
-    public WorkspaceEntity(User owner, String template) {
-        this.id = UUID.randomUUID();
-        this.owner = owner;
-        this.template = template;
-    }
+    private String url;
 }

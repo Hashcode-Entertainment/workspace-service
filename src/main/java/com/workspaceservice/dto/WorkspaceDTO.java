@@ -11,4 +11,5 @@ public class WorkspaceDTO {
     private UUID id;
     private String owner;
     private String template;
+    private String url;
 }
