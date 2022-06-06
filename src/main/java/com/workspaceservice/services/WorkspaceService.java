@@ -1,6 +1,7 @@
 package com.workspaceservice.services;
 
 import com.workspaceservice.dao.WorkspaceEntity;
+import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
@@ -13,12 +14,13 @@ public class WorkspaceService implements IWorkspaceService {
     private WorkspaceRepository workspaceRepository;
 
     @Override
-    public WorkspaceEntity createWorkspace(WorkspaceDTO workspaceDTO) {
+    public WorkspaceDTO createWorkspace(NewWorkspaceDTO newWorkspaceDTO) {
         WorkspaceEntity newWorkspace = new WorkspaceEntity(
-                workspaceDTO.getOwner(),
-                workspaceDTO.getTemplate()
+                newWorkspaceDTO.getOwner(),
+                newWorkspaceDTO.getTemplate()
         );
         workspaceRepository.save(newWorkspace);
-        return workspaceRepository.getReferenceById(newWorkspace.getId());
+        var entity = workspaceRepository.findById(newWorkspace.getId());
+        return new WorkspaceDTO(entity.getId(), entity.getOwner().toString(), entity.getTemplate());
     }
 }

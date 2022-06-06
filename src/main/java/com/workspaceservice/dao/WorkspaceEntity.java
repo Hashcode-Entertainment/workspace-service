@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -19,8 +20,8 @@ import javax.persistence.Id;
 @Entity
 public class WorkspaceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
 
     @Type(type = "com.workspaceservice.user.UserHibernateType")
     private User owner;
@@ -28,6 +29,7 @@ public class WorkspaceEntity {
     private String template;
 
     public WorkspaceEntity(User owner, String template) {
+        this.id = UUID.randomUUID();
         this.owner = owner;
         this.template = template;
     }

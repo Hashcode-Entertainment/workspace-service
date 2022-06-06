@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceservice.dao.WorkspaceEntity;
-import com.workspaceservice.dto.WorkspaceDTO;
+import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
@@ -71,10 +71,10 @@ class WorkspaceControllerTest {
 
     @Test
     void createWorkspace() throws Exception {
-        WorkspaceDTO workspaceDTO = new WorkspaceDTO(new User("user3"), "jbancj");
+        NewWorkspaceDTO newWorkspaceDTO = new NewWorkspaceDTO(new User("user3"), "jbancj");
         MvcResult result = mockMvc.perform(post("/workspace")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(workspaceDTO)))
+                        .content(objectMapper.writeValueAsString(newWorkspaceDTO)))
                 .andExpect(status().isCreated()).andReturn();
 
         assertTrue(result.getResponse().getContentAsString().contains("jbancj"));

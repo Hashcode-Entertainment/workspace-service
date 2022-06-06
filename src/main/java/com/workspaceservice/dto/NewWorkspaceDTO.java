@@ -1,14 +1,12 @@
 package com.workspaceservice.dto;
 
+import com.workspaceservice.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 @AllArgsConstructor
-public class WorkspaceDTO {
-    private UUID id;
-    private String owner;
+public class NewWorkspaceDTO {
+    private User owner;
     private String template;
 }
