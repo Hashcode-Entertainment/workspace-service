@@ -1,8 +1,8 @@
 package com.workspaceservice.controller;
 
-import com.workspaceservice.dao.Workspace;
-import com.workspaceservice.dto.WorkspaceDTO;
+import com.workspaceservice.dao.WorkspaceEntity;
 import com.workspaceservice.dto.AddFilesRequestDTO;
+import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
@@ -27,14 +27,14 @@ public class WorkspaceController {
     // http://localhost:8080/workspace/all
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Workspace> getAllWorkspaces() {
+    public List<WorkspaceEntity> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
 
     // http://localhost:8080/workspace/id/1
     @GetMapping("/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Workspace> getWorkspaceById(@PathVariable Long id) {
+    public Optional<WorkspaceEntity> getWorkspaceById(@PathVariable Long id) {
         return workspaceRepository.findById(id);
     }
 
@@ -42,14 +42,14 @@ public class WorkspaceController {
     // http://localhost:8080/workspace
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace createWorkspace(@RequestBody WorkspaceDTO workspaceDTO){
+    public WorkspaceEntity createWorkspace(@RequestBody WorkspaceDTO workspaceDTO) {
         return workspaceService.createWorkspace(workspaceDTO);
     }
 
     // http://localhost:8080/workspace/user
     @PostMapping("/{template}/files")
     @ResponseStatus(HttpStatus.CREATED)
-    public Workspace addFile(@PathVariable String template, @RequestBody AddFilesRequestDTO addFilesRequestDTO){
+    public WorkspaceEntity addFile(@PathVariable String template, @RequestBody AddFilesRequestDTO addFilesRequestDTO) {
         return gitService.addFileToWorkspace(template, addFilesRequestDTO);
     }
 

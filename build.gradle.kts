@@ -1,7 +1,7 @@
 plugins {
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    java
+    kotlin("jvm") version "1.6.21"
 }
 
 group = "com.workspaceservice"
@@ -37,6 +37,11 @@ dependencies {
     implementation("org.eclipse.jgit:org.eclipse.jgit.http.server:6.1.0.202203080745-r")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+
+    val kotestVersion = "5.3.0"
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.mockk:mockk:1.12.4")
 }
 
 tasks.test {

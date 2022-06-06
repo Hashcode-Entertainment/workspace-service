@@ -1,10 +1,11 @@
 package com.workspaceservice.interfaces;
 
-import com.workspaceservice.dao.Workspace;
-import com.workspaceservice.dto.WorkspaceDTO;
+import com.workspaceservice.dao.WorkspaceEntity;
 import com.workspaceservice.dto.AddFilesRequestDTO;
+import com.workspaceservice.dto.WorkspaceDTO;
 
 public interface IGitService {
-    Workspace createWorkspace(WorkspaceDTO workspaceDTO);
-    Workspace addFileToWorkspace(String template, AddFilesRequestDTO jsonRequestDTO);
+    WorkspaceEntity createWorkspace(WorkspaceDTO workspaceDTO);
+
+    WorkspaceEntity addFileToWorkspace(String template, AddFilesRequestDTO jsonRequestDTO);
 }
