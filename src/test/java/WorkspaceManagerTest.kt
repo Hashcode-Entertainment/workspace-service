@@ -43,7 +43,7 @@ class WorkspaceManagerTest : WordSpec({
     }
 
     "deleteRepo()" should {
-        "delete a git repo" {
+        "delete the git repo" {
             val gitServer = mockk<GitServer>(relaxed = true)
             val workspaceManager = WorkspaceManager(gitServer, URL("https://workspaces.test.com"))
             workspaceManager.deleteWorkspace(UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f"))
