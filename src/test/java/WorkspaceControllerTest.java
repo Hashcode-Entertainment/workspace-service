@@ -1,5 +1,3 @@
-package com.workspaceservice.controller;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceservice.dao.WorkspaceEntity;
 import com.workspaceservice.dto.WorkspaceDTO;

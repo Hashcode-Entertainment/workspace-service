@@ -1,18 +1,13 @@
 package com.workspaceservice.git;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class GitUtils {
-    public static URL generateRepoUrl(URL baseUrl, String id) {
-        try {
-            return new URL(baseUrl, id + ".git");
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
-        }
+    public static String generateRepoPath(@NotNull String id) {
+        return String.format("/%s.git", id);
     }
 
-    public static String resolveBranchRef(String branch) {
+    public static String resolveBranchRef(@NotNull String branch) {
         return "refs/heads/" + branch;
     }
 }

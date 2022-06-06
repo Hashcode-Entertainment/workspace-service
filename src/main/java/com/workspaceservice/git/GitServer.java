@@ -1,34 +1,29 @@
 package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.nio.file.Path;
 
-import static com.workspaceservice.git.GitUtils.generateRepoUrl;
+import static com.workspaceservice.git.GitUtils.generateRepoPath;
 
-
+@RequiredArgsConstructor
 public class GitServer {
     private final Path rootPath;
-    private final URL baseUrl;
 
-    public GitServer(Path rootPath, URL baseUrl) {
-        this.rootPath = rootPath;
-        this.baseUrl = baseUrl;
-    }
-
-    public URL createRepo(String id) throws FileSystemException {
+    public String createRepo(@NotNull String id) throws FileSystemException {
         JGit.createRepo(resolveRepoPath(id));
 
-        return generateRepoUrl(baseUrl, id);
+        return generateRepoPath(id);
     }
 
     @SuppressWarnings("RedundantThrows")
-    public void deleteRepo(String id) throws FileSystemException {
+    public void deleteRepo(@NotNull String id) throws FileSystemException {
         JGit.deleteRepo(rootPath.resolve(id));
     }
 
-    public CommitBuilder createCommitBuilder(String repoId) {
+    public CommitBuilder createCommitBuilder(@NotNull String repoId) {
         return new CommitBuilder(resolveRepoPath(repoId));
     }
 
