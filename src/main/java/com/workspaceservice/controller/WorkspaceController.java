@@ -1,6 +1,7 @@
 package com.workspaceservice.controller;
 
 import com.workspaceservice.dao.WorkspaceEntity;
+import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.exceptions.FileSystemException;
@@ -22,6 +23,7 @@ public class WorkspaceController {
     @Autowired
     private IWorkspaceService workspaceService;
 
+
     // GET Methods
     // http://localhost:8080/workspace/all
     @GetMapping("/all")
@@ -39,6 +41,13 @@ public class WorkspaceController {
 
     // POST Methods
     // http://localhost:8080/workspace
+
+    //    {
+    //        "owner": {
+    //        "id": "user6"
+    //    },
+    //        "template" : null
+    //    }
     @PostMapping()
     public ResponseEntity<WorkspaceDTO> createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
         try {
@@ -48,12 +57,12 @@ public class WorkspaceController {
         }
     }
 
-    // http://localhost:8080/workspace/user
-//    @PostMapping("/{template}/files")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public WorkspaceEntity addFile(@PathVariable String template, @RequestBody AddFilesRequestDTO addFilesRequestDTO) {
-//        return gitService.addFileToWorkspace(template, addFilesRequestDTO);
-//    }
+    // http://localhost:8080/workspace/{UUID}/files
+    @PostMapping("/{workspaceId}/files")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addFiles(@PathVariable String workspaceId, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
+        workspaceService.addFiles(workspaceId, addFilesList);
+    }
 
     // DELETE Methods
     // http://localhost:8080/workspace/all

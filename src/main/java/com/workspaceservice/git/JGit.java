@@ -48,7 +48,7 @@ public abstract class JGit {
             @NotNull Repository repo
     ) throws FileSystemException {
 
-        var entry = new DirCacheEntry(path.toString());
+        var entry = new DirCacheEntry(path.normalize().toString().replace("\\", "/"));
         entry.setLength(bytes.length);
         entry.setLastModified(Instant.now());
         entry.setFileMode(REGULAR_FILE);
