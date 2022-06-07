@@ -1,5 +1,6 @@
 package com.workspaceservice;
 
+import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.mappers.WorkspaceMapper;
@@ -30,7 +31,7 @@ public class WorkspaceManager {
         this.workspaceRepository = workspaceRepository;
     }
 
-    public Workspace createWorkspace(@NotNull User owner, @Nullable Workspace template)
+    public Workspace createWorkspace(@NotNull String owner, @Nullable Workspace template)
             throws FileSystemException {
 
         var id = UUID.randomUUID();
@@ -46,7 +47,7 @@ public class WorkspaceManager {
     }
 
     public Workspace getWorkspace(UUID id) {
-        return WorkspaceMapper.toWorkspace(workspaceRepository.findById(id));
+        return WorkspaceMapper.toWorkspace(workspaceRepository.findById(id).get());
     }
 
     public void deleteWorkspace(@NotNull UUID id) throws FileSystemException {

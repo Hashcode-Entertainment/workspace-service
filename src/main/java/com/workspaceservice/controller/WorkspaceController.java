@@ -1,6 +1,6 @@
 package com.workspaceservice.controller;
 
-import com.workspaceservice.dao.WorkspaceEntity;
+import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/workspace")
@@ -28,24 +29,22 @@ public class WorkspaceController {
     // http://localhost:8080/workspace/all
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<WorkspaceEntity> getAllWorkspaces() {
+    public List<WorkspaceDAO> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
 
     // http://localhost:8080/workspace/id/1
     @GetMapping("/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<WorkspaceEntity> getWorkspaceById(@PathVariable Long id) {
-        return workspaceRepository.findById(id);
+    public WorkspaceDAO getWorkspaceById(@PathVariable UUID id) {
+        return workspaceRepository.getReferenceById(id);
     }
 
     // POST Methods
     // http://localhost:8080/workspace
 
     //    {
-    //        "owner": {
-    //        "id": "user6"
-    //    },
+    //        "owner": "user6",
     //        "template" : null
     //    }
     @PostMapping()
@@ -75,7 +74,7 @@ public class WorkspaceController {
     // http://localhost:8080/workspace/id/1
     @DeleteMapping("/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWorkspaceById(@PathVariable Long id) {
+    public void deleteWorkspaceById(@PathVariable UUID id) {
         workspaceRepository.deleteById(id);
     }
 }
