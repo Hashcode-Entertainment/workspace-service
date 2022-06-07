@@ -3,6 +3,7 @@ package com.workspaceservice.git;
 import com.workspaceservice.exceptions.FileSystemException;
 import kotlin.io.FilesKt;
 import org.eclipse.jgit.dircache.DirCache;
+import org.eclipse.jgit.dircache.DirCacheBuilder;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.ObjectId;
@@ -42,7 +43,7 @@ public abstract class JGit {
     }
 
     public static void addFileToDirCache(
-            @NotNull DirCache dirCache,
+            @NotNull DirCacheBuilder dirCacheBuilder,
             @NotNull Path path,
             @NotNull byte[] bytes,
             @NotNull Repository repo
@@ -56,14 +57,13 @@ public abstract class JGit {
         var blobId = insertBlob(repo, bytes);
         entry.setObjectId(blobId);
 
-        var dirCacheBuilder = dirCache.builder();
         dirCacheBuilder.add(entry);
-        dirCacheBuilder.finish();
     }
 
     public static void commit(
             @NotNull Repository repo,
             @NotNull DirCache dirCache,
+            @NotNull DirCacheBuilder dirCacheBuilder,
             @NotNull String message,
             @NotNull String branch,
             @NotNull String authorName,
@@ -71,7 +71,7 @@ public abstract class JGit {
     ) throws FileSystemException {
 
         try {
-            commitThrowingIOException(repo, dirCache, message, branch, authorName, authorEmail);
+            commitThrowingIOException(repo, dirCache, dirCacheBuilder, message, branch, authorName, authorEmail);
         } catch (IOException e) {
             throw new FileSystemException(e);
         }
@@ -80,6 +80,7 @@ public abstract class JGit {
     private static void commitThrowingIOException(
             Repository repo,
             DirCache dirCache,
+            DirCacheBuilder dirCacheBuilder,
             String message,
             String branch,
             String authorName,
@@ -87,6 +88,8 @@ public abstract class JGit {
     ) throws IOException {
 
         var branchRefName = resolveBranchRef(branch);
+
+        dirCacheBuilder.finish();
 
         ObjectId commitId;
         try (var inserter = repo.getObjectDatabase().newInserter()) {

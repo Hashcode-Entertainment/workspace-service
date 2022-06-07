@@ -2,6 +2,7 @@ package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
 import org.eclipse.jgit.dircache.DirCache;
+import org.eclipse.jgit.dircache.DirCacheBuilder;
 import org.eclipse.jgit.lib.Repository;
 
 import java.nio.file.Path;
@@ -13,6 +14,7 @@ public class CommitBuilder {
     private final Path repoPath;
     private Repository repo = null;
     private final DirCache dirCache = DirCache.newInCore();
+    private final DirCacheBuilder dirCacheBuilder = dirCache.builder();
     private boolean committed = false;
 
     public CommitBuilder(Path repoPath) {
@@ -29,7 +31,7 @@ public class CommitBuilder {
 
     public void addFile(Path path, byte[] bytes) throws FileSystemException {
         openRepo();
-        addFileToDirCache(dirCache, path, bytes, repo);
+        addFileToDirCache(dirCacheBuilder, path, bytes, repo);
     }
 
     public void addFile(Path path, String content) throws FileSystemException {
@@ -45,7 +47,7 @@ public class CommitBuilder {
             throw new IllegalStateException("Already committed");
         }
 
-        JGit.commit(repo, dirCache, message, branch, authorName, authorEmail);
+        JGit.commit(repo, dirCache, dirCacheBuilder, message, branch, authorName, authorEmail);
         repo.close();
         committed = true;
     }

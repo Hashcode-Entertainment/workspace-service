@@ -1,5 +1,5 @@
 ### Create a new workspace (admin)
-POST {{host}}/workspaces
+POST {{host}}/workspace
 Accept: application/json
 Content-Type: application/json
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Create a new worksapce (user)
-POST {{host}}/workspaces
+POST {{host}}/workspace
 Accept: application/json
 Content-Type: application/json
 
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### Add files
-POST {{host}}/workspaces/sdjafjlx138/files
+POST {{host}}/workspace/4586cc65-c98a-4014-aeb2-09ce67102a2f/files
 Accept: application/json
 Content-Type: application/json
 
