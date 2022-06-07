@@ -19,7 +19,7 @@ public abstract class WorkspaceMapper {
         );
     }
 
-    public static WorkspaceDAO toWorkspaceEntity(Workspace workspace) {
+    public static WorkspaceDAO toWorkspaceDao(Workspace workspace) {
         if (workspace == null) {
             return null;
         }

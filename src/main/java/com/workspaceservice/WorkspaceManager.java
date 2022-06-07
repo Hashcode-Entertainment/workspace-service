@@ -39,8 +39,8 @@ public class WorkspaceManager {
         var templateId = template != null ? template.id() : null;
 
         var workspace = new Workspace(id, owner.id(), templateId, repoUrl);
-        var workspaceEntity = WorkspaceMapper.toWorkspaceEntity(workspace);
-        workspaceRepository.save(workspaceEntity);
+        var workspaceDao = WorkspaceMapper.toWorkspaceDao(workspace);
+        workspaceRepository.save(workspaceDao);
 
         return workspace;
     }
