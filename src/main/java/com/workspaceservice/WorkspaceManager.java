@@ -31,7 +31,7 @@ public class WorkspaceManager {
         this.workspaceRepository = workspaceRepository;
     }
 
-    public Workspace createWorkspace(@NotNull User owner, @Nullable Workspace template)
+    public Workspace createWorkspace(@NotNull String owner, @Nullable Workspace template)
             throws FileSystemException {
 
         var id = UUID.randomUUID();
