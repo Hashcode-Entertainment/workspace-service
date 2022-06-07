@@ -31,7 +31,7 @@ public class WorkspaceManager {
         this.workspaceRepository = workspaceRepository;
     }
 
-    public Workspace createWorkspace(@NotNull String owner, @Nullable Workspace template)
+    public Workspace createWorkspace(@NotNull User owner, @Nullable Workspace template)
             throws FileSystemException {
 
         var id = UUID.randomUUID();
@@ -39,7 +39,7 @@ public class WorkspaceManager {
         var repoUrl = resolveUrl(gitServerUrl, repoPath);
         var templateId = template != null ? template.id() : null;
 
-        var workspace = new Workspace(id, owner, templateId, repoUrl);
+        var workspace = new Workspace(id, owner.id(), templateId, repoUrl);
         var workspaceEntity = WorkspaceMapper.toWorkspaceEntity(workspace);
         workspaceRepository.save(workspaceEntity);
 

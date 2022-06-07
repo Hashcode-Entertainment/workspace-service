@@ -1,7 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
-import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import com.workspaceservice.user.User;
@@ -30,8 +29,6 @@ class WorkspaceControllerTest {
     WorkspaceRepository workspaceRepository;
     @Autowired
     IWorkspaceService workspaceService;
-    @Autowired
-    IGitService gitService;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
