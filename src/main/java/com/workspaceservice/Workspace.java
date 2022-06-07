@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public record Workspace(
         @NotNull UUID id,
-        @NotNull User owner,
+        @NotNull String owner,
         @Nullable UUID template,
         @NotNull URL url
 ) {

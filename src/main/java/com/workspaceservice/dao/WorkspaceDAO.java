@@ -1,6 +1,5 @@
 package com.workspaceservice.dao;
 
-import com.workspaceservice.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,15 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class WorkspaceEntity {
+public class WorkspaceDAO {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-
-    @Type(type = "com.workspaceservice.user.UserHibernateType")
-    private User owner;
-
+//    @Type(type = "com.workspaceservice.user.UserHibernateType")
+    private String owner;
     private UUID template;
-
     private String url;
 }

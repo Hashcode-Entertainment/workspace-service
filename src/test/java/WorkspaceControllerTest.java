@@ -1,7 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.workspaceservice.dao.WorkspaceEntity;
+import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
-import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import com.workspaceservice.user.User;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,25 +24,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 class WorkspaceControllerTest {
+
     @Autowired
     WorkspaceRepository workspaceRepository;
     @Autowired
     IWorkspaceService workspaceService;
     @Autowired
-    IGitService gitService;
-    @Autowired
     private WebApplicationContext webApplicationContext;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
+    User user = new User("user");
 
-    WorkspaceEntity workspace1;
-    WorkspaceEntity workspace2;
+    WorkspaceDAO workspace1;
+    WorkspaceDAO workspace2;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        workspace1 = new WorkspaceEntity(new User("user1"), "cljdbd");
-        workspace2 = new WorkspaceEntity(new User("user2"), "aVsdva");
+        User user1 = new User("user1");
+        User user2 = new User("user2");
+        workspace1 = new WorkspaceDAO(UUID.randomUUID(), user1.id(), UUID.randomUUID(), "https://jsdafjsdjklfasd.com/adjfadsj");
+        workspace2 = new WorkspaceDAO(UUID.randomUUID(), user2.id(), UUID.randomUUID(), "https://sdvsdvsdvsdv.com/oiajscbh");
         workspaceRepository.saveAll(List.of(workspace1, workspace2));
     }
 
@@ -71,7 +74,7 @@ class WorkspaceControllerTest {
 
     @Test
     void createWorkspace() throws Exception {
-        NewWorkspaceDTO newWorkspaceDTO = new NewWorkspaceDTO(new User("user3"), "jbancj");
+        NewWorkspaceDTO newWorkspaceDTO = new NewWorkspaceDTO(user.id(), "jbancj");
         MvcResult result = mockMvc.perform(post("/workspace")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newWorkspaceDTO)))

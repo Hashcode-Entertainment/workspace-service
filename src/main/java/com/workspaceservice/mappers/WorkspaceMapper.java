@@ -1,29 +1,29 @@
 package com.workspaceservice.mappers;
 
 import com.workspaceservice.Workspace;
-import com.workspaceservice.dao.WorkspaceEntity;
+import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.WorkspaceDTO;
 
 import static com.workspaceservice.utils.UrlUtils.url;
 
 public abstract class WorkspaceMapper {
-    public static Workspace toWorkspace(WorkspaceEntity workspaceEntity) {
-        if (workspaceEntity == null) {
+    public static Workspace toWorkspace(WorkspaceDAO workspaceDAO) {
+        if (workspaceDAO == null) {
             return null;
         }
         return new Workspace(
-                workspaceEntity.getId(),
-                workspaceEntity.getOwner(),
-                workspaceEntity.getTemplate(),
-                url(workspaceEntity.getUrl())
+                workspaceDAO.getId(),
+                workspaceDAO.getOwner(),
+                workspaceDAO.getTemplate(),
+                url(workspaceDAO.getUrl())
         );
     }
 
-    public static WorkspaceEntity toWorkspaceEntity(Workspace workspace) {
+    public static WorkspaceDAO toWorkspaceEntity(Workspace workspace) {
         if (workspace == null) {
             return null;
         }
-        return new WorkspaceEntity(
+        return new WorkspaceDAO(
                 workspace.id(),
                 workspace.owner(),
                 workspace.template(),
