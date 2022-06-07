@@ -6,6 +6,5 @@ import com.workspaceservice.dto.NewWorkspaceDTO;
 
 public interface IGitService {
     WorkspaceDAO createWorkspace(NewWorkspaceDTO newWorkspaceDTO);
-
     WorkspaceDAO addFileToWorkspace(String template, AddFilesRequestDTO jsonRequestDTO);
 }

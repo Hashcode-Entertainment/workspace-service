@@ -20,7 +20,7 @@ public class WorkspaceServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        data.populate();
+//        data.populate();
 //        data.deleteRep();
     }
 

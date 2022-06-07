@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/workspace")
+@RequestMapping("workspace")
 public class WorkspaceController {
     @Autowired
     private WorkspaceRepository workspaceRepository;
@@ -27,17 +27,17 @@ public class WorkspaceController {
 
     // GET Methods
     // http://localhost:8080/workspace/all
-    @GetMapping("/all")
+    @GetMapping("all")
     @ResponseStatus(HttpStatus.OK)
     public List<WorkspaceDAO> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
 
     // http://localhost:8080/workspace/id/1
-    @GetMapping("/id/{id}")
+    @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkspaceDAO getWorkspaceById(@PathVariable UUID id) {
-        return workspaceRepository.getReferenceById(id);
+    public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
+        return workspaceRepository.findById(UUID.fromString(id));
     }
 
     // POST Methods
@@ -56,8 +56,8 @@ public class WorkspaceController {
         }
     }
 
-    // http://localhost:8080/workspace/{UUID}/files
-    @PostMapping("/{workspaceId}/files")
+    // http://localhost:8080/workspace/{workspaceId}/files
+    @PostMapping("{workspaceId}/files")
     @ResponseStatus(HttpStatus.CREATED)
     public void addFiles(@PathVariable String workspaceId, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
         workspaceService.addFiles(workspaceId, addFilesList);
@@ -65,14 +65,14 @@ public class WorkspaceController {
 
     // DELETE Methods
     // http://localhost:8080/workspace/all
-    @DeleteMapping("/all")
+    @DeleteMapping("all")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllWorkspaces() {
         workspaceRepository.deleteAll();
     }
 
     // http://localhost:8080/workspace/id/1
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWorkspaceById(@PathVariable UUID id) {
         workspaceRepository.deleteById(id);
