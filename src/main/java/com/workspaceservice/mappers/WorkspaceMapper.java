@@ -37,7 +37,7 @@ public abstract class WorkspaceMapper {
         }
         return new WorkspaceDTO(
                 workspace.id(),
-                workspace.owner().toString(),
+                workspace.owner(),
                 workspace.template() != null ? workspace.template().toString() : null,
                 workspace.url().toString()
         );
