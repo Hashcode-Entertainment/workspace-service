@@ -9,6 +9,7 @@ import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.mappers.WorkspaceMapper;
+import com.workspaceservice.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class WorkspaceService implements IWorkspaceService {
             template = workspaceManager.getWorkspace(templateId);
         }
         var workspace = workspaceManager.createWorkspace(
-                newWorkspaceDTO.getOwner(),
+                new User(newWorkspaceDTO.getOwner()),
                 template
         );
 
@@ -44,6 +45,6 @@ public class WorkspaceService implements IWorkspaceService {
             var content = addFilesRequestDTO.getContent();
             commitBuilder.addFile(Path.of(path), content);
         }
-            commitBuilder.commit("New commit", "master", "sages", "sages@sages.com");
+        commitBuilder.commit("New commit", "master", "sages", "sages@sages.com");
     }
 }

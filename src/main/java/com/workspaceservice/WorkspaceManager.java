@@ -39,7 +39,7 @@ public class WorkspaceManager {
         var repoUrl = resolveUrl(gitServerUrl, repoPath);
         var templateId = template != null ? template.id() : null;
 
-        var workspace = new Workspace(id, owner, templateId, repoUrl);
+        var workspace = new Workspace(id, owner.id(), templateId, repoUrl);
         var workspaceEntity = WorkspaceMapper.toWorkspaceEntity(workspace);
         workspaceRepository.save(workspaceEntity);
 
