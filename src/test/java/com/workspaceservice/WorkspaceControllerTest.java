@@ -1,11 +1,8 @@
 package com.workspaceservice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceservice.dao.WorkspaceDAO;
-import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
-import com.workspaceservice.interfaces.IGitService;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import com.workspaceservice.user.User;
@@ -20,8 +17,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
