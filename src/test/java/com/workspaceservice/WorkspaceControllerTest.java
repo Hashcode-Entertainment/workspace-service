@@ -60,8 +60,10 @@ class WorkspaceControllerTest {
 
     @Test
     void getAllWorkspaces() throws Exception {
-        MvcResult result = mockMvc.perform(get("/workspace/all"))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult result = mockMvc
+                .perform(get("/workspace/all"))
+                .andExpect(status().isOk())
+                .andReturn();
 
         assertTrue(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace1Id + ".git"));
         assertTrue(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace2Id + ".git"));
@@ -90,25 +92,25 @@ class WorkspaceControllerTest {
     }
 
     //Spróbować przetestować poprzez dodanie workspace'ów poprzez RESTa, a nie bezpośrednio przez dodanie do DB
-//    @Test
-//    void addFile() throws Exception {
-//        var workspaceId = workspace1Id.toString();
-//        List<AddFilesRequestDTO> addFilesList = new ArrayList<>();
-//        addFilesList.add(new AddFilesRequestDTO("src/file1.txt", "Task 1"));
-//        addFilesList.add(new AddFilesRequestDTO("task.yaml", "{ ... }"));
-//
-//        MvcResult result = mockMvc.perform(post("/workspace/{workspaceId}/files", workspaceId)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(addFilesList)))
-//                .andExpect(status().isCreated()).andReturn();
-//
-//        assertTrue(result.getResponse().getStatus() == 201);
-//
-//        var path = "C:\\Users\\ykhom\\IdeaProjects\\workspace-service\\test_repos\\" + workspaceId + "\\" + addFilesList.get(1).getPath();
-//        File file = new File(path);
-//
-//        assertTrue(file.exists());
-//    }
+    @Test
+    void addFile() throws Exception {
+        var workspaceId = workspace1Id.toString();
+        List<AddFilesRequestDTO> addFilesList = new ArrayList<>();
+        addFilesList.add(new AddFilesRequestDTO("src/file1.txt", "Task 1"));
+        addFilesList.add(new AddFilesRequestDTO("task.yaml", "{ ... }"));
+
+        MvcResult result = mockMvc.perform(post("/workspace/{workspaceId}/files", workspaceId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(addFilesList)))
+                .andExpect(status().isCreated()).andReturn();
+
+        assertTrue(result.getResponse().getStatus() == 201);
+
+        var path = "C:\\Users\\ykhom\\IdeaProjects\\workspace-service\\test_repos\\" + workspaceId + "\\" + addFilesList.get(1).getPath();
+        File file = new File(path);
+
+        assertTrue(file.exists());
+    }
 
     @Test
     void deleteAllWorkspaces() throws Exception {
