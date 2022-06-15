@@ -24,19 +24,11 @@ public class WorkspaceController {
     @Autowired
     private IWorkspaceService workspaceService;
 
-
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<WorkspaceDAO> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
-        return workspaceRepository.findById(UUID.fromString(id));
-    }
-
 
     /*  Example body: 
         {
@@ -53,15 +45,21 @@ public class WorkspaceController {
         }
     }
 
-    @PostMapping("/{id}/files")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addFiles(@PathVariable String id, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
-        workspaceService.addFiles(id, addFilesList);
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
+        return workspaceRepository.findById(UUID.fromString(id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWorkspaceById(@PathVariable UUID id) {
         workspaceRepository.deleteById(id);
+    }
+
+    @PostMapping("/{id}/files")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addFiles(@PathVariable String id, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
+        workspaceService.addFiles(id, addFilesList);
     }
 }
