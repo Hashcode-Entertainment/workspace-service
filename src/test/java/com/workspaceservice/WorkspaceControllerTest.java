@@ -2,6 +2,7 @@ package com.workspaceservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceservice.dao.WorkspaceDAO;
+import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +64,7 @@ class WorkspaceControllerTest {
     @Test
     void getAllWorkspaces() throws Exception {
         MvcResult result = mockMvc
-                .perform(get("/workspace/all"))
+                .perform(get("/workspaces"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -106,7 +109,7 @@ class WorkspaceControllerTest {
 
         assertTrue(result.getResponse().getStatus() == 201);
 
-        var path = "C:\\Users\\ykhom\\IdeaProjects\\workspace-service\\test_repos\\" + workspaceId + "\\" + addFilesList.get(1).getPath();
+        var path = "test_repos\\" + workspaceId + "\\" + addFilesList.get(1).getPath();
         File file = new File(path);
 
         assertTrue(file.exists());
@@ -114,7 +117,7 @@ class WorkspaceControllerTest {
 
     @Test
     void deleteAllWorkspaces() throws Exception {
-        MvcResult result = mockMvc.perform(delete("/workspace/all"))
+        MvcResult result = mockMvc.perform(delete("/workspaces"))
                 .andExpect(status().isNoContent()).andReturn();
 
         assertFalse(result.getResponse().getContentAsString().contains("cljdbd"));

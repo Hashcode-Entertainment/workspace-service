@@ -39,7 +39,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
-    implementation("com.google.guava:guava:30.0-android")
+    implementation("com.google.guava:guava:31.1-jre")
 
     val kotestVersion = "5.3.0"
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")

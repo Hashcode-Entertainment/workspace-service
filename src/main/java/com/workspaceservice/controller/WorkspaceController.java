@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("workspace")
+@RequestMapping()
 public class WorkspaceController {
     @Autowired
     private WorkspaceRepository workspaceRepository;
@@ -26,15 +26,15 @@ public class WorkspaceController {
 
 
     // GET Methods
-    // http://localhost:8080/workspace/all
-    @GetMapping("all")
+    // http://localhost:8080/workspaces
+    @GetMapping("workspaces")
     @ResponseStatus(HttpStatus.OK)
     public List<WorkspaceDAO> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
 
     // http://localhost:8080/workspace/id/1
-    @GetMapping("id/{id}")
+    @GetMapping("workspace/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
         return workspaceRepository.findById(UUID.fromString(id));
@@ -47,7 +47,7 @@ public class WorkspaceController {
     //        "owner": "user6",
     //        "template" : null
     //    }
-    @PostMapping()
+    @PostMapping("workspace")
     public ResponseEntity<WorkspaceDTO> createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
         try {
             return new ResponseEntity<>(workspaceService.createWorkspace(newWorkspaceDTO), HttpStatus.CREATED);
@@ -57,22 +57,22 @@ public class WorkspaceController {
     }
 
     // http://localhost:8080/workspace/{workspaceId}/files
-    @PostMapping("{workspaceId}/files")
+    @PostMapping("workspace/{workspaceId}/files")
     @ResponseStatus(HttpStatus.CREATED)
     public void addFiles(@PathVariable String workspaceId, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
         workspaceService.addFiles(workspaceId, addFilesList);
     }
 
     // DELETE Methods
-    // http://localhost:8080/workspace/all
-    @DeleteMapping("all")
+    // http://localhost:8080/workspaces
+    @DeleteMapping("workspaces")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllWorkspaces() {
         workspaceRepository.deleteAll();
     }
 
     // http://localhost:8080/workspace/id/1
-    @DeleteMapping("id/{id}")
+    @DeleteMapping("workspace/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWorkspaceById(@PathVariable UUID id) {
         workspaceRepository.deleteById(id);
