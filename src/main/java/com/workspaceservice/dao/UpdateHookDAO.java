@@ -19,9 +19,10 @@ public class UpdateHookDAO {
     @OneToMany
     private List<RepoFileDAO> files = new ArrayList<>();
 
-    private String workspaceUrl;
+    private String url;
 
-    public UpdateHookDAO(List<Path> files, String workspaceUrl) {
+    public UpdateHookDAO(List<Path> files, String url) {
+        //TODO
     }
 
 }
