@@ -109,7 +109,7 @@ class WorkspaceControllerTest {
 
         assertTrue(result.getResponse().getStatus() == 201);
 
-        var path = "test_repos\\" + workspaceId + "\\" + addFilesList.get(1).getPath();
+        var path = "test_repos/" + workspaceId + "/" + addFilesList.get(1).getPath();
         File file = new File(path);
 
         assertTrue(file.exists());
