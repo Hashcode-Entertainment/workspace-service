@@ -11,11 +11,17 @@ public abstract class WorkspaceMapper {
         if (workspaceDAO == null) {
             return null;
         }
+
+        var updateHookDAO = workspaceDAO.getUpdateHook();
+        var updateHook = UpdateHookMapper.toUpdateHook(updateHookDAO);
+        var updateHookDTO = UpdateHookMapper.toUpdateHookDto(updateHook);
+
         return new Workspace(
                 workspaceDAO.getId(),
                 workspaceDAO.getOwner(),
                 workspaceDAO.getTemplate(),
-                url(workspaceDAO.getUrl())
+                url(workspaceDAO.getUrl()),
+                updateHookDTO
         );
     }
 
@@ -23,11 +29,16 @@ public abstract class WorkspaceMapper {
         if (workspace == null) {
             return null;
         }
+
+        var updateHook = UpdateHookMapper.toUpdateHook(workspace.updateHook());
+        var updateHookDao = UpdateHookMapper.toUpdateHookDao(updateHook);
+
         return new WorkspaceDAO(
                 workspace.id(),
                 workspace.owner(),
                 workspace.template(),
-                workspace.url().toString()
+                workspace.url().toString(),
+                updateHookDao
         );
     }
 

@@ -9,4 +9,5 @@ import lombok.Getter;
 public class NewWorkspaceDTO {
     private String owner;
     private String template;
+    private UpdateHookDTO updateHook;
 }

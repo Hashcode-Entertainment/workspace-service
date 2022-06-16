@@ -36,9 +36,13 @@ public class WorkspaceService implements IWorkspaceService {
                 throw new NoSuchWorkspaceException(templateId);
             }
         }
+
+        var updateHook = newWorkspaceDTO.getUpdateHook();
+
         var workspace = workspaceManager.createWorkspace(
                 new User(newWorkspaceDTO.getOwner()),
-                template
+                template,
+                updateHook
         );
 
         return WorkspaceMapper.toWorkspaceDTO(workspace);

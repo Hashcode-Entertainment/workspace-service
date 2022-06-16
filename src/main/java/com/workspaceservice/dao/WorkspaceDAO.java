@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.UUID;
 
 @Setter
@@ -23,4 +24,6 @@ public class WorkspaceDAO {
     private String owner;
     private UUID template;
     private String url;
+    @OneToOne
+    private UpdateHookDAO updateHook;
 }
