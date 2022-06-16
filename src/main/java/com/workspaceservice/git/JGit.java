@@ -2,6 +2,7 @@ package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
 import kotlin.io.FilesKt;
+import lombok.SneakyThrows;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheBuilder;
 import org.eclipse.jgit.dircache.DirCacheEntry;
@@ -13,12 +14,15 @@ import org.eclipse.jgit.lib.Repository;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.NoSuchElementException;
 
 import static com.workspaceservice.git.GitUtils.resolveBranchRef;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static org.springframework.util.FileSystemUtils.copyRecursively;
 
 public abstract class JGit {
     public static Repository loadRepo(@NotNull Path path) throws FileSystemException {
@@ -127,6 +131,24 @@ public abstract class JGit {
     private static ObjectId insertBlob(Repository repo, byte[] bytes) throws FileSystemException {
         try (var inserter = repo.getObjectDatabase().newInserter()) {
             return inserter.insert(OBJ_BLOB, bytes);
+        } catch (IOException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @SneakyThrows(FileSystemException.class)
+    public static Repository resolveRepo(String name, Path reposDirectory) {
+        var path = reposDirectory.resolve(name);
+        if (!Files.exists(path)) {
+            throw new NoSuchElementException("Repository not found");
+        }
+
+        return loadRepo(reposDirectory.resolve(name));
+    }
+
+    public static void forkRepo(Path original, Path copy) throws FileSystemException {
+        try {
+            copyRecursively(original, copy);
         } catch (IOException e) {
             throw new FileSystemException(e);
         }

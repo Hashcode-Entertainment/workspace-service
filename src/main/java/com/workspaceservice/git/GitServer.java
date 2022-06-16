@@ -34,6 +34,11 @@ public class GitServer {
         return new CommitBuilder(resolveRepoPath(repoId));
     }
 
+    public String forkRepo(@NotNull String originalId, String copyId) throws FileSystemException {
+        JGit.forkRepo(resolveRepoPath(originalId), resolveRepoPath(copyId));
+        return generateRepoPath(copyId);
+    }
+
     private Path resolveRepoPath(String repoId) {
         return rootPath.resolve(repoId + ".git");
     }

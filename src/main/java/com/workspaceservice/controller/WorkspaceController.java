@@ -5,6 +5,7 @@ import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.exceptions.FileSystemException;
+import com.workspaceservice.exceptions.NoSuchWorkspaceException;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class WorkspaceController {
     @Autowired
     private IWorkspaceService workspaceService;
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public List<WorkspaceDAO> getAllWorkspaces() {
         return workspaceRepository.findAll();
@@ -36,12 +37,15 @@ public class WorkspaceController {
             "template" : null
         }
     */
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<WorkspaceDTO> createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
         try {
-            return new ResponseEntity<>(workspaceService.createWorkspace(newWorkspaceDTO), HttpStatus.CREATED);
+            var workspace = workspaceService.createWorkspace(newWorkspaceDTO);
+            return new ResponseEntity<>(workspace, HttpStatus.CREATED);
         } catch (FileSystemException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoSuchWorkspaceException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
