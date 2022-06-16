@@ -1,6 +1,6 @@
 package com.workspaceservice.services;
 
-import com.workspaceservice.Workspace;
+import com.workspaceservice.domain.Workspace;
 import com.workspaceservice.WorkspaceManager;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
@@ -9,6 +9,7 @@ import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.exceptions.NoSuchWorkspaceException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.interfaces.IWorkspaceService;
+import com.workspaceservice.mappers.UpdateHookMapper;
 import com.workspaceservice.mappers.WorkspaceMapper;
 import com.workspaceservice.user.User;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class WorkspaceService implements IWorkspaceService {
             }
         }
 
-        var updateHook = newWorkspaceDTO.getUpdateHook();
+        var updateHookDto = newWorkspaceDTO.getUpdateHook();
+        var updateHook = UpdateHookMapper.toUpdateHook(updateHookDto);
 
         var workspace = workspaceManager.createWorkspace(
                 new User(newWorkspaceDTO.getOwner()),

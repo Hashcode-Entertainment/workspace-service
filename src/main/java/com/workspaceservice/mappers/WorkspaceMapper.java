@@ -1,6 +1,6 @@
 package com.workspaceservice.mappers;
 
-import com.workspaceservice.Workspace;
+import com.workspaceservice.domain.Workspace;
 import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.WorkspaceDTO;
 
@@ -14,14 +14,13 @@ public abstract class WorkspaceMapper {
 
         var updateHookDAO = workspaceDAO.getUpdateHook();
         var updateHook = UpdateHookMapper.toUpdateHook(updateHookDAO);
-        var updateHookDTO = UpdateHookMapper.toUpdateHookDto(updateHook);
 
         return new Workspace(
                 workspaceDAO.getId(),
                 workspaceDAO.getOwner(),
                 workspaceDAO.getTemplate(),
                 url(workspaceDAO.getUrl()),
-                updateHookDTO
+                updateHook
         );
     }
 
@@ -30,7 +29,7 @@ public abstract class WorkspaceMapper {
             return null;
         }
 
-        var updateHook = UpdateHookMapper.toUpdateHook(workspace.updateHook());
+        var updateHook = workspace.updateHook();
         var updateHookDao = UpdateHookMapper.toUpdateHookDao(updateHook);
 
         return new WorkspaceDAO(

@@ -1,4 +1,4 @@
-package com.workspaceservice.utils;
+package com.workspaceservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

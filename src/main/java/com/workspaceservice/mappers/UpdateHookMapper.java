@@ -2,7 +2,7 @@ package com.workspaceservice.mappers;
 
 import com.workspaceservice.dao.UpdateHookDAO;
 import com.workspaceservice.dto.UpdateHookDTO;
-import com.workspaceservice.utils.UpdateHook;
+import com.workspaceservice.domain.UpdateHook;
 
 import java.nio.file.Paths;
 

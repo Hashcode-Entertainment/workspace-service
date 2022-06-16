@@ -1,6 +1,7 @@
 package com.workspaceservice;
 
-import com.workspaceservice.dto.UpdateHookDTO;
+import com.workspaceservice.domain.UpdateHook;
+import com.workspaceservice.domain.Workspace;
 import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.mappers.WorkspaceMapper;
@@ -31,7 +32,7 @@ public class WorkspaceManager {
         this.workspaceRepository = workspaceRepository;
     }
 
-    public Workspace createWorkspace(@NotNull User owner, @Nullable Workspace template, @Nullable UpdateHookDTO updateHookDTO)
+    public Workspace createWorkspace(@NotNull User owner, @Nullable Workspace template, @Nullable UpdateHook updateHook)
             throws FileSystemException {
 
         var id = UUID.randomUUID();
@@ -46,7 +47,7 @@ public class WorkspaceManager {
 
         var repoUrl = resolveUrl(gitServerUrl, repoPath);
 
-        var workspace = new Workspace(id, owner.id(), templateId, repoUrl, updateHookDTO);
+        var workspace = new Workspace(id, owner.id(), templateId, repoUrl, updateHook);
         var workspaceDao = WorkspaceMapper.toWorkspaceDao(workspace);
         workspaceRepository.save(workspaceDao);
 

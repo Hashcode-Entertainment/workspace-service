@@ -1,5 +1,6 @@
 package com.workspaceservice
 
+import com.workspaceservice.domain.Workspace
 import com.workspaceservice.git.GitServer
 import com.workspaceservice.repositories.WorkspaceRepository
 import com.workspaceservice.user.User
