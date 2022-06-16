@@ -34,9 +34,16 @@ public class WorkspaceManager {
             throws FileSystemException {
 
         var id = UUID.randomUUID();
-        var repoPath = gitServer.createRepo(id.toString());
-        var repoUrl = resolveUrl(gitServerUrl, repoPath);
         var templateId = template != null ? template.id() : null;
+
+        String repoPath;
+        if (template == null) {
+            repoPath = gitServer.createRepo(id.toString());
+        } else {
+            repoPath = gitServer.forkRepo(templateId.toString(), id.toString());
+        }
+
+        var repoUrl = resolveUrl(gitServerUrl, repoPath);
 
         var workspace = new Workspace(id, owner.id(), templateId, repoUrl);
         var workspaceDao = WorkspaceMapper.toWorkspaceDao(workspace);

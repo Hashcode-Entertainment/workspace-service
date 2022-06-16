@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import static com.workspaceservice.git.GitUtils.resolveBranchRef;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static org.springframework.util.FileSystemUtils.copyRecursively;
 
 public abstract class JGit {
     public static Repository loadRepo(@NotNull Path path) throws FileSystemException {
@@ -143,5 +144,13 @@ public abstract class JGit {
         }
 
         return loadRepo(reposDirectory.resolve(name));
+    }
+
+    public static void forkRepo(Path original, Path copy) throws FileSystemException {
+        try {
+            copyRecursively(original, copy);
+        } catch (IOException e) {
+            throw new FileSystemException(e);
+        }
     }
 }

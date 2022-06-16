@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
   "owner": "pawelkielb-user",
-  "template": "sdjafjlx138",
+  "template": "18efd86b-e410-42bd-913c-87e0dfaed2d4",
   "readOnlyFiles": [
     "README.md",
     "src/file.txt"
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### Add files
-POST {{host}}/workspaces/4586cc65-c98a-4014-aeb2-09ce67102a2f/files
+POST {{host}}/workspaces/18efd86b-e410-42bd-913c-87e0dfaed2d4/files
 Accept: application/json
 Content-Type: application/json
 
