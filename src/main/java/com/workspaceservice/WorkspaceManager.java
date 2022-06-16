@@ -46,7 +46,7 @@ public class WorkspaceManager {
     }
 
     public Workspace getWorkspace(UUID id) {
-        return WorkspaceMapper.toWorkspace(workspaceRepository.findById(id).get());
+        return WorkspaceMapper.toWorkspace(workspaceRepository.findById(id).orElse(null));
     }
 
     public void deleteWorkspace(@NotNull UUID id) throws FileSystemException {

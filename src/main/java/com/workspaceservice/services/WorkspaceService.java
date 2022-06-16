@@ -6,6 +6,7 @@ import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
 import com.workspaceservice.exceptions.FileSystemException;
+import com.workspaceservice.exceptions.NoSuchWorkspaceException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.mappers.WorkspaceMapper;
@@ -24,11 +25,16 @@ public class WorkspaceService implements IWorkspaceService {
     private final GitServer gitServer;
 
     @Override
-    public WorkspaceDTO createWorkspace(NewWorkspaceDTO newWorkspaceDTO) throws FileSystemException {
+    public WorkspaceDTO createWorkspace(NewWorkspaceDTO newWorkspaceDTO)
+            throws FileSystemException, NoSuchWorkspaceException {
+
         Workspace template = null;
         if (newWorkspaceDTO.getTemplate() != null) {
             var templateId = UUID.fromString(newWorkspaceDTO.getTemplate());
             template = workspaceManager.getWorkspace(templateId);
+            if (template == null) {
+                throw new NoSuchWorkspaceException(templateId);
+            }
         }
         var workspace = workspaceManager.createWorkspace(
                 new User(newWorkspaceDTO.getOwner()),

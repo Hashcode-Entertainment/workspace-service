@@ -2,6 +2,7 @@ package com.workspaceservice.git;
 
 import com.workspaceservice.exceptions.FileSystemException;
 import kotlin.io.FilesKt;
+import lombok.SneakyThrows;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheBuilder;
 import org.eclipse.jgit.dircache.DirCacheEntry;
@@ -13,8 +14,10 @@ import org.eclipse.jgit.lib.Repository;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.NoSuchElementException;
 
 import static com.workspaceservice.git.GitUtils.resolveBranchRef;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
@@ -130,5 +133,15 @@ public abstract class JGit {
         } catch (IOException e) {
             throw new FileSystemException(e);
         }
+    }
+
+    @SneakyThrows(FileSystemException.class)
+    public static Repository resolveRepo(String name, Path reposDirectory) {
+        var path = reposDirectory.resolve(name);
+        if (!Files.exists(path)) {
+            throw new NoSuchElementException("Repository not found");
+        }
+
+        return loadRepo(reposDirectory.resolve(name));
     }
 }
