@@ -1,5 +1,6 @@
 package com.workspaceservice.mappers;
 
+import com.workspaceservice.dao.RepoFileDAO;
 import com.workspaceservice.dao.UpdateHookDAO;
 import com.workspaceservice.dto.UpdateHookDTO;
 import com.workspaceservice.domain.UpdateHook;
@@ -20,7 +21,7 @@ public abstract class UpdateHookMapper {
                         .map(repoFileDAO ->
                                 Paths.get(repoFileDAO.getFilePath()))
                         .toList(),
-                updateHookDAO.getWorkspaceUrl()
+                updateHookDAO.getUrl()
         );
     }
 
@@ -37,8 +38,12 @@ public abstract class UpdateHookMapper {
             return null;
         }
 
+        var repoFileDAOList = updateHook.getFiles().stream().map(file ->
+                        new RepoFileDAO(file.toString()))
+                .toList();
+
         return new UpdateHookDAO(
-                updateHook.getFiles(),
+                repoFileDAOList,
                 updateHook.getUrl()
         );
     }

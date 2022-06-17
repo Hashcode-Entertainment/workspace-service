@@ -18,9 +18,7 @@ import java.util.UUID;
 @Entity
 public class WorkspaceDAO {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-//    @Type(type = "com.workspaceservice.user.UserHibernateType")
     private String owner;
     private UUID template;
     private String url;
