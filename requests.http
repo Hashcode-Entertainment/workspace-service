@@ -7,7 +7,7 @@ Content-Type: application/json
   "owner": "pawelkielb-admin",
   "hooks": {
     "onUpdate": {
-      "file": "task.yaml",
+      "files": ["task.yaml"],
       "url": "http://localhost:8080/hooks/onUpdate"
     }
   }

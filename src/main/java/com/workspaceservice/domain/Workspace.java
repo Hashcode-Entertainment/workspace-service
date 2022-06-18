@@ -1,6 +1,6 @@
-package com.workspaceservice;
+package com.workspaceservice.domain;
 
-import com.workspaceservice.user.User;
+import com.workspaceservice.domain.UpdateHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +11,7 @@ public record Workspace(
         @NotNull UUID id,
         @NotNull String owner,
         @Nullable UUID template,
-        @NotNull URL url
+        @NotNull URL url,
+        @Nullable UpdateHook updateHook
 ) {
 }
