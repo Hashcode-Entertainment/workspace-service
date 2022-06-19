@@ -5,7 +5,6 @@ import com.workspaceservice.dao.UpdateHookDAO;
 import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
-import com.workspaceservice.dto.UpdateHookDTO;
 import com.workspaceservice.interfaces.IWorkspaceService;
 import com.workspaceservice.repositories.WorkspaceRepository;
 import com.workspaceservice.user.User;
@@ -87,8 +86,8 @@ class WorkspaceControllerTest {
     @Test
     void createWorkspace() throws Exception {
         var template = UUID.randomUUID().toString();
-        var updateHookDto = mock(UpdateHookDTO.class);
-        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), template, updateHookDto);
+        var hooks = mock(NewWorkspaceDTO.Hooks.class);
+        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), template, hooks);
         MvcResult result = mockMvc.perform(post("/workspace")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newWorkspaceDTO)))
