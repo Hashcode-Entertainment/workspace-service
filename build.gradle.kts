@@ -45,6 +45,8 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.mockk:mockk:1.12.4")
+
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 }
 
 tasks.test {

@@ -2,8 +2,8 @@ package com.workspaceservice.mappers;
 
 import com.workspaceservice.dao.RepoFileDAO;
 import com.workspaceservice.dao.UpdateHookDAO;
-import com.workspaceservice.dto.UpdateHookDTO;
 import com.workspaceservice.domain.UpdateHook;
+import com.workspaceservice.dto.UpdateHookDTO;
 
 import java.nio.file.Paths;
 
@@ -30,7 +30,13 @@ public abstract class UpdateHookMapper {
             return null;
         }
 
-        return new UpdateHook(updateHookDTO.getFiles(), updateHookDTO.getWorkspaceUrl());
+        var files = updateHookDTO
+                .getFiles()
+                .stream()
+                .map(Paths::get)
+                .toList();
+
+        return new UpdateHook(files, updateHookDTO.getUrl());
     }
 
     public static UpdateHookDAO toUpdateHookDao(UpdateHook updateHook) {
@@ -44,17 +50,6 @@ public abstract class UpdateHookMapper {
 
         return new UpdateHookDAO(
                 repoFileDAOList,
-                updateHook.getUrl()
-        );
-    }
-
-    public static UpdateHookDTO toUpdateHookDto(UpdateHook updateHook) {
-        if (updateHook == null) {
-            return null;
-        }
-
-        return new UpdateHookDTO(
-                updateHook.getFiles(),
                 updateHook.getUrl()
         );
     }

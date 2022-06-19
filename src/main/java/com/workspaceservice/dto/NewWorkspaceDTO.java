@@ -1,13 +1,17 @@
 package com.workspaceservice.dto;
 
-import com.workspaceservice.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class NewWorkspaceDTO {
     private String owner;
     private String template;
-    private UpdateHookDTO updateHook;
+    private Hooks hooks;
+
+    public record Hooks(UpdateHookDTO onUpdate) {
+    }
 }

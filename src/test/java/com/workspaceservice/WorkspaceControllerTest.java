@@ -1,6 +1,7 @@
 package com.workspaceservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workspaceservice.dao.UpdateHookDAO;
 import com.workspaceservice.dao.WorkspaceDAO;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
@@ -24,8 +25,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -51,8 +52,9 @@ class WorkspaceControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         User user1 = new User("user1");
         User user2 = new User("user2");
-        workspace1 = new WorkspaceDAO(workspace1Id, user1.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git");
-        workspace2 = new WorkspaceDAO(workspace2Id, user2.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git");
+        var updateHookDao = mock(UpdateHookDAO.class);
+        workspace1 = new WorkspaceDAO(workspace1Id, user1.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git", updateHookDao);
+        workspace2 = new WorkspaceDAO(workspace2Id, user2.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git", updateHookDao);
         workspaceRepository.saveAll(List.of(workspace1, workspace2));
     }
 
@@ -84,7 +86,8 @@ class WorkspaceControllerTest {
     @Test
     void createWorkspace() throws Exception {
         var template = UUID.randomUUID().toString();
-        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), template);
+        var hooks = mock(NewWorkspaceDTO.Hooks.class);
+        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), template, hooks);
         MvcResult result = mockMvc.perform(post("/workspace")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newWorkspaceDTO)))
@@ -103,8 +106,8 @@ class WorkspaceControllerTest {
         addFilesList.add(new AddFilesRequestDTO("task.yaml", "{ ... }"));
 
         MvcResult result = mockMvc.perform(post("/workspace/{workspaceId}/files", workspaceId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(addFilesList)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(addFilesList)))
                 .andExpect(status().isCreated()).andReturn();
 
         assertTrue(result.getResponse().getStatus() == 201);

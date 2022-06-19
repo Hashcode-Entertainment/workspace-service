@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -22,6 +22,7 @@ public class WorkspaceDAO {
     private String owner;
     private UUID template;
     private String url;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     private UpdateHookDAO updateHook;
 }

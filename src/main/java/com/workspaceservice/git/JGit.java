@@ -14,6 +14,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -53,7 +54,7 @@ public abstract class JGit {
             @NotNull Repository repo
     ) throws FileSystemException {
 
-        var entry = new DirCacheEntry(path.normalize().toString().replace("\\", "/"));
+        var entry = new DirCacheEntry(normalizePath(path));
         entry.setLength(bytes.length);
         entry.setLastModified(Instant.now());
         entry.setFileMode(REGULAR_FILE);
@@ -149,6 +150,22 @@ public abstract class JGit {
     public static void forkRepo(Path original, Path copy) throws FileSystemException {
         try {
             copyRecursively(original, copy);
+        } catch (IOException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    private static String normalizePath(Path path) {
+        return path.normalize().toString().replace("\\", "/");
+    }
+
+    public static String getFileContent(Path repoPath, Path filePath, String branch) throws FileSystemException {
+        try (var repo = loadRepo(repoPath)) {
+            var tree = repo.resolve(resolveBranchRef(branch));
+            var treeEntry = repo.resolve(tree.getName() + ":" + normalizePath(filePath));
+            var blob = repo.resolve(treeEntry.getName());
+            var bytes = repo.open(blob).getBytes();
+            return new String(bytes, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new FileSystemException(e);
         }

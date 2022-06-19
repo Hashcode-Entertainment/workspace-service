@@ -1,7 +1,7 @@
 package com.workspaceservice.services;
 
 import com.workspaceservice.domain.Workspace;
-import com.workspaceservice.WorkspaceManager;
+import com.workspaceservice.domain.WorkspaceManager;
 import com.workspaceservice.dto.AddFilesRequestDTO;
 import com.workspaceservice.dto.NewWorkspaceDTO;
 import com.workspaceservice.dto.WorkspaceDTO;
@@ -38,7 +38,7 @@ public class WorkspaceService implements IWorkspaceService {
             }
         }
 
-        var updateHookDto = newWorkspaceDTO.getUpdateHook();
+        var updateHookDto = newWorkspaceDTO.getHooks().onUpdate();
         var updateHook = UpdateHookMapper.toUpdateHook(updateHookDto);
 
         var workspace = workspaceManager.createWorkspace(
