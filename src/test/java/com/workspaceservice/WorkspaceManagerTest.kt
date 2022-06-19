@@ -24,7 +24,7 @@ class WorkspaceManagerTest : WordSpec({
                 workspaceRepository
             )
             val owner = mockk<User>(relaxed = true)
-            workspaceManager.createWorkspace(owner, null)
+            workspaceManager.createWorkspace(owner, null, null)
             verify {
                 gitServer.createRepo(any())
             }
@@ -41,7 +41,7 @@ class WorkspaceManagerTest : WordSpec({
                 workspaceRepository
             )
             val owner = mockk<User>(relaxed = true)
-            val workspace = workspaceManager.createWorkspace(owner, null)
+            val workspace = workspaceManager.createWorkspace(owner, null, null)
             workspace.url shouldBe URL("https://workspaces.test.com/2e4d6c9e-e0d7-4cd4-a931-324e37f8dc39.git")
         }
 
@@ -57,7 +57,7 @@ class WorkspaceManagerTest : WordSpec({
             val owner = mockk<User>(relaxed = true)
             val template = mockk<Workspace>(relaxed = true)
             every { template.id } returns UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f")
-            val workspace = workspaceManager.createWorkspace(owner, template)
+            val workspace = workspaceManager.createWorkspace(owner, template, null)
             workspace.template shouldBe UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f")
         }
     }

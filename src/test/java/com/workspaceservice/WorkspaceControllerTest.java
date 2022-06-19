@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class WorkspaceControllerTest {
     @Autowired
     WorkspaceRepository workspaceRepository;
@@ -38,10 +40,10 @@ class WorkspaceControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     User user = new User("user");
-    private UUID workspace1Id = UUID.randomUUID();
-    private UUID workspace2Id = UUID.randomUUID();
+    private final UUID workspace1Id = UUID.randomUUID();
+    private final UUID workspace2Id = UUID.randomUUID();
 
     WorkspaceDAO workspace1;
     WorkspaceDAO workspace2;
@@ -51,8 +53,8 @@ class WorkspaceControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         User user1 = new User("user1");
         User user2 = new User("user2");
-        workspace1 = new WorkspaceDAO(workspace1Id, user1.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git");
-        workspace2 = new WorkspaceDAO(workspace2Id, user2.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git");
+        workspace1 = new WorkspaceDAO(workspace1Id, user1.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace1Id + ".git", null);
+        workspace2 = new WorkspaceDAO(workspace2Id, user2.id(), UUID.randomUUID(), "https://localhost:8080/" + workspace2Id + ".git", null);
         workspaceRepository.saveAll(List.of(workspace1, workspace2));
     }
 
@@ -68,65 +70,57 @@ class WorkspaceControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace1Id + ".git"));
-        assertTrue(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace2Id + ".git"));
+        assertTrue(result.getResponse().getContentAsString().contains(workspace1.getUrl()));
+        assertTrue(result.getResponse().getContentAsString().contains(workspace2.getUrl()));
     }
 
     @Test
     void getWorkspaceById() throws Exception {
-        MvcResult result = mockMvc.perform(get("/workspace/id/{id}", workspace1.getId()))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult result = mockMvc
+                .perform(get("/workspaces/{id}", workspace1.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace1Id + ".git"));
-        assertFalse(result.getResponse().getContentAsString().contains("https://localhost:8080/" + workspace2Id + ".git"));
+        assertTrue(result.getResponse().getContentAsString().contains(workspace1.getUrl()));
+        assertFalse(result.getResponse().getContentAsString().contains(workspace2.getUrl()));
     }
 
     @Test
     void createWorkspace() throws Exception {
-        var template = UUID.randomUUID().toString();
-        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), template);
-        MvcResult result = mockMvc.perform(post("/workspace")
+        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), null, null);
+        MvcResult result = mockMvc.perform(post("/workspaces")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newWorkspaceDTO)))
                 .andExpect(status().isCreated()).andReturn();
 
         assertTrue(result.getResponse().getContentAsString().contains(user.id()));
-        assertTrue(result.getResponse().getContentAsString().contains(template));
     }
-
-    //Spróbować przetestować poprzez dodanie workspace'ów poprzez RESTa, a nie bezpośrednio przez dodanie do DB
     @Test
     void addFile() throws Exception {
-        var workspaceId = workspace1Id.toString();
+
+        var newWorkspaceDTO = new NewWorkspaceDTO(user.id(), null, null);
+        var workspaceDTO = workspaceService.createWorkspace(newWorkspaceDTO);
+        var workspaceId = workspaceDTO.getId().toString();
+
         List<AddFilesRequestDTO> addFilesList = new ArrayList<>();
         addFilesList.add(new AddFilesRequestDTO("src/file1.txt", "Task 1"));
         addFilesList.add(new AddFilesRequestDTO("task.yaml", "{ ... }"));
 
-        MvcResult result = mockMvc.perform(post("/workspace/{workspaceId}/files", workspaceId)
+        MvcResult result = mockMvc.perform(post("/workspaces/{workspaceId}/files", workspaceId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addFilesList)))
                 .andExpect(status().isCreated()).andReturn();
 
-        assertTrue(result.getResponse().getStatus() == 201);
+        assertEquals(201, result.getResponse().getStatus());
 
-        var path = "test_repos/" + workspaceId + "/" + addFilesList.get(1).getPath();
-        File file = new File(path);
-
-        assertTrue(file.exists());
-    }
-
-    @Test
-    void deleteAllWorkspaces() throws Exception {
-        MvcResult result = mockMvc.perform(delete("/workspaces"))
-                .andExpect(status().isNoContent()).andReturn();
-
-        assertFalse(result.getResponse().getContentAsString().contains("cljdbd"));
-        assertFalse(result.getResponse().getContentAsString().contains("aVsdva"));
+//        var path = "test_repos/" + workspaceId + "/" + addFilesList.get(1).getPath();
+//        File file = new File(path);
+//        assertTrue(file.exists());
     }
 
     @Test
     void deleteWorkspaceById() throws Exception {
-        MvcResult result = mockMvc.perform(delete("/workspace/id/{id}", workspace1.getId()))
+        mockMvc.perform(delete("/workspaces/{id}", workspace1.getId()))
                 .andExpect(status().isNoContent()).andReturn();
 
         assertNotEquals(2, workspaceRepository.findAll().size());

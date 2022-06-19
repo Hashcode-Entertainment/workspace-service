@@ -31,12 +31,11 @@ public class WorkspaceController {
         return workspaceRepository.findAll();
     }
 
-    /*  Example body: 
-        {
-            "owner": "user6",
-            "template" : null
-        }
-    */
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
+        return workspaceRepository.findById(UUID.fromString(id));
+    }
     @PostMapping("")
     public ResponseEntity<WorkspaceDTO> createWorkspace(@RequestBody NewWorkspaceDTO newWorkspaceDTO) {
         try {
@@ -49,21 +48,14 @@ public class WorkspaceController {
         }
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<WorkspaceDAO> getWorkspaceById(@PathVariable String id) {
-        return workspaceRepository.findById(UUID.fromString(id));
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWorkspaceById(@PathVariable UUID id) {
-        workspaceRepository.deleteById(id);
-    }
-
     @PostMapping("/{id}/files")
     @ResponseStatus(HttpStatus.CREATED)
     public void addFiles(@PathVariable String id, @RequestBody List<AddFilesRequestDTO> addFilesList) throws FileSystemException {
         workspaceService.addFiles(id, addFilesList);
+    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWorkspaceById(@PathVariable UUID id) {
+        workspaceRepository.deleteById(id);
     }
 }
