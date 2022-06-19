@@ -40,10 +40,10 @@ class WorkspaceControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     User user = new User("user");
-    private UUID workspace1Id = UUID.randomUUID();
-    private UUID workspace2Id = UUID.randomUUID();
+    private final UUID workspace1Id = UUID.randomUUID();
+    private final UUID workspace2Id = UUID.randomUUID();
 
     WorkspaceDAO workspace1;
     WorkspaceDAO workspace2;
@@ -111,17 +111,16 @@ class WorkspaceControllerTest {
                 .content(objectMapper.writeValueAsString(addFilesList)))
                 .andExpect(status().isCreated()).andReturn();
 
-        assertTrue(result.getResponse().getStatus() == 201);
+        assertEquals(201, result.getResponse().getStatus());
 
 //        var path = "test_repos/" + workspaceId + "/" + addFilesList.get(1).getPath();
 //        File file = new File(path);
-//
 //        assertTrue(file.exists());
     }
 
     @Test
     void deleteWorkspaceById() throws Exception {
-        MvcResult result = mockMvc.perform(delete("/workspaces/{id}", workspace1.getId()))
+        mockMvc.perform(delete("/workspaces/{id}", workspace1.getId()))
                 .andExpect(status().isNoContent()).andReturn();
 
         assertNotEquals(2, workspaceRepository.findAll().size());
