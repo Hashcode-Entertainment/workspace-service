@@ -38,7 +38,7 @@ public class WorkspaceService implements IWorkspaceService {
             }
         }
 
-        var updateHookDto = newWorkspaceDTO.getHooks().onUpdate();
+        var updateHookDto = newWorkspaceDTO.getHooks() != null ? newWorkspaceDTO.getHooks().onUpdate() : null;
         var updateHook = UpdateHookMapper.toUpdateHook(updateHookDto);
 
         var workspace = workspaceManager.createWorkspace(
