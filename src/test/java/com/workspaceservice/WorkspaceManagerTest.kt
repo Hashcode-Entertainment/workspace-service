@@ -1,5 +1,6 @@
 package com.workspaceservice
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.workspaceservice.domain.UpdateHook
 import com.workspaceservice.domain.Workspace
 import com.workspaceservice.domain.WorkspaceManager
@@ -20,13 +21,15 @@ class WorkspaceManagerTest : WordSpec({
             val gitServer = mockk<GitServer>(relaxed = true)
             val workspaceRepository = mockk<WorkspaceRepository>(relaxed = true)
             every { workspaceRepository.save(any()) } returns null
+            val objectMapper = mockk<ObjectMapper>(relaxed = true)
             val workspaceManager = WorkspaceManager(
                 gitServer,
                 URL("https://workspaces.test.com"),
-                workspaceRepository
+                workspaceRepository,
+                objectMapper
             )
             val owner = mockk<User>(relaxed = true)
-            val updateHook = mockk<UpdateHook>()
+            val updateHook = mockk<UpdateHook>(relaxed = true)
             workspaceManager.createWorkspace(owner, null, updateHook)
             verify {
                 gitServer.createRepo(any())
@@ -38,13 +41,15 @@ class WorkspaceManagerTest : WordSpec({
             every { gitServer.createRepo(any()) } returns "/2e4d6c9e-e0d7-4cd4-a931-324e37f8dc39.git"
             val workspaceRepository = mockk<WorkspaceRepository>(relaxed = true)
             every { workspaceRepository.save(any()) } returns null
+            val objectMapper = mockk<ObjectMapper>(relaxed = true)
             val workspaceManager = WorkspaceManager(
                 gitServer,
                 URL("https://workspaces.test.com"),
-                workspaceRepository
+                workspaceRepository,
+                objectMapper
             )
             val owner = mockk<User>(relaxed = true)
-            val updateHook = mockk<UpdateHook>()
+            val updateHook = mockk<UpdateHook>(relaxed = true)
             val workspace = workspaceManager.createWorkspace(owner, null, updateHook)
             workspace.url shouldBe URL("https://workspaces.test.com/2e4d6c9e-e0d7-4cd4-a931-324e37f8dc39.git")
         }
@@ -53,15 +58,17 @@ class WorkspaceManagerTest : WordSpec({
             val gitServer = mockk<GitServer>(relaxed = true)
             val workspaceRepository = mockk<WorkspaceRepository>(relaxed = true)
             every { workspaceRepository.save(any()) } returns null
+            val objectMapper = mockk<ObjectMapper>(relaxed = true)
             val workspaceManager = WorkspaceManager(
                 gitServer,
                 URL("https://workspaces.test.com"),
-                workspaceRepository
+                workspaceRepository,
+                objectMapper
             )
             val owner = mockk<User>(relaxed = true)
             val template = mockk<Workspace>(relaxed = true)
             every { template.id } returns UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f")
-            val updateHook = mockk<UpdateHook>()
+            val updateHook = mockk<UpdateHook>(relaxed = true)
             val workspace = workspaceManager.createWorkspace(owner, template, updateHook)
             workspace.template shouldBe UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f")
         }
@@ -71,10 +78,12 @@ class WorkspaceManagerTest : WordSpec({
         "delete the git repo" {
             val gitServer = mockk<GitServer>(relaxed = true)
             val workspaceRepository = mockk<WorkspaceRepository>(relaxed = true)
+            val objectMapper = mockk<ObjectMapper>(relaxed = true)
             val workspaceManager = WorkspaceManager(
                 gitServer,
                 URL("https://workspaces.test.com"),
-                workspaceRepository
+                workspaceRepository,
+                objectMapper
             )
             workspaceManager.deleteWorkspace(UUID.fromString("8d2debc6-3880-4a33-93bd-ece541c6d27f"))
             verify {
