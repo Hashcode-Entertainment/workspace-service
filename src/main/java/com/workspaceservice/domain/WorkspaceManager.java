@@ -1,7 +1,5 @@
-package com.workspaceservice;
+package com.workspaceservice.domain;
 
-import com.workspaceservice.domain.UpdateHook;
-import com.workspaceservice.domain.Workspace;
 import com.workspaceservice.exceptions.FileSystemException;
 import com.workspaceservice.git.GitServer;
 import com.workspaceservice.mappers.WorkspaceMapper;
